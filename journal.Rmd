@@ -16,6 +16,14 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
+# Intro to the tidyverse - first challenge
+In the following you will find my R Code and the corresponding plots.
+
+```{r, cache=FALSE}
+knitr::read_chunk('Intro_2_tidyverse/Bike_sales/sales_analysis_challenge.R')
+```
+
+
 # First tries
 These are my first changes in the **Journal** 'markdown' File 
 
