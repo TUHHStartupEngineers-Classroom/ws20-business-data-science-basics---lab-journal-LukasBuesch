@@ -1,5 +1,5 @@
 ---
-title: "Journal (reproducible report)"
+title: "Journal"
 author: "Lukas Buesch"
 date: "2020-11-05"
 output:
@@ -200,6 +200,7 @@ sales_by_location_year_tbl %>%
 In the following you will find my R Code and the corresponding plots for the challenges in the chapter **Data Acquivision**.
 
 ## Challenge 1 - API
+For this challenge I decided to call a weather API, namely `OpenWeather`, to get the current weather in Hamburg.
 ```{r chapter_2_challenge_1}
 # API challenge ----
 
