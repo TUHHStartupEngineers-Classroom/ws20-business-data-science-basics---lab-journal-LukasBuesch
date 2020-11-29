@@ -17,8 +17,8 @@ options(knitr.duplicate.label = "allow")
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-# Intro to the tidyverse - first challenge
-In the following you will find my R Code and the corresponding plots.
+# Intro to the tidyverse
+In the following you will find my R Code and the corresponding plots for the challenge in the chapter **Intro to the tidyverse**.
 
 #```{r <challenge 1>, cache=FALSE ,fig.width=10, fig.height=7}
 #knitr::read_chunk('D:/SD(D)/BWL_data_science/ws20-business-data-science-basics---lab-journal-LukasBuesch/Intro_2_tidyverse/Bike_sales/sales_analysis#_challenge.R')
@@ -196,42 +196,41 @@ sales_by_location_year_tbl %>%
 ```
 
 
-# First tries
-These are my first changes in the **Journal** 'markdown' File 
+# Data Acquivision
+In the following you will find my R Code and the corresponding plots for the challenges in the chapter **Data Acquivision**.
 
-**IMPORTANT:** You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.
+## Challenge 1 - API
+```{r chapter_2_challenge_1}
+# API challenge ----
 
-This is an `.Rmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
+# 1.0 LIBRARIES ----
 
-# My first post
+library(tidyverse) # Main Package - Loads dplyr, purrr, etc.s
+library(jsonlite)  # converts JSON files to R objects
+library(glue)      # concatenate strings
+library(httr)
 
-Last compiled: `r Sys.Date()`
 
-Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left. 
+# 2.0 Get data  ----
+# Get data from weather API  via function
 
-## Second level header
+weather_api <- function(city) {
+  # path is city name
+  API_key <- Sys.getenv("API_key")
+  url <- modify_url(url = glue("https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}"))
+  resp <- GET(url)
+  stop_for_status(resp) # automatically throws an error if a request did not succeed
+}
 
-You can add more headers by adding more hashtags. These won't be put into the table of contents
 
-### third level header
+weather_hamburg_raw <- weather_api(city = "Hamburg")
 
-Here's an even lower level header
+weather_hamburg <- fromJSON(rawToChar(weather_hamburg_raw$content))
 
-# My second post (note the order)
+weather_hamburg
 
-Last compiled: `r Sys.Date()`
 
-I'm writing this tutorial going from the top down. And, this is how it will be printed. So, notice the second post is second in the list. If you want your most recent post to be at the top, then make a new post starting at the top. If you want the oldest first, do, then keep adding to the bottom
-
-# Adding R stuff
-
-So far this is just a blog where you can write in plain text and serve your writing to a webpage. One of the main purposes of this lab journal is to record your progress learning R. The reason I am asking you to use this process is because you can both make a website, and a lab journal, and learn R all in R-studio. This makes everything really convenient and in the same place. 
-
-So, let's say you are learning how to make a histogram in R. For example, maybe you want to sample 100 numbers from a normal distribution with mean = 0, and standard deviation = 1, and then you want to plot a histogram. You can do this right here by using an r code block, like this:
-
-```{r}
-samples <- rnorm(100, mean=0, sd=1)
-hist(samples)
 ```
 
-When you knit this R Markdown document, you will see that the histogram is printed to the page, along with the R code. This document can be set up to hide the R code in the webpage, just delete the comment (hashtag) from the cold folding option in the yaml header up top. For purposes of letting yourself see the code, and me see the code, best to keep it the way that it is. You'll learn that all of these things and more can be customized in each R code block.
+
+## Challenge 2 - Webscrapping
