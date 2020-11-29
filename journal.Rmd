@@ -197,7 +197,7 @@ sales_by_location_year_tbl %>%
 
 
 # Data Acquivision
-In the following you will find my R Code and the corresponding plots for the challenges in the chapter **Data Acquivision**.
+In the following you will find my R Code for the challenges in the chapter **Data Acquivision**.
 
 ## Challenge 1 - API
 For this challenge I decided to call a weather API, namely `OpenWeather`, to get the current weather in Hamburg.
@@ -426,7 +426,7 @@ bike_data_lst <- map(bike_url_vec, get_bike_data)
 bike_data_tbl <- bind_rows(bike_data_lst)
 
 
-name_with_price = bind_cols(bike_data_tbl,bike_url_tbl$url)
+name_with_price = bind_cols(bike_data_tbl$price,bike_url_tbl$url)
 
 name_with_price
 
