@@ -5,7 +5,7 @@ output: html_document
 
 <div style="padding-top: 30px;"></div>
 
-![](images/logo.png)
+![](images/logo_christmas.png)
 
 # **Welcome to my awesome Lab Journal**
 

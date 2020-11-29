@@ -24,7 +24,7 @@ In the following you will find my R Code and the corresponding plots.
 #knitr::read_chunk('D:/SD(D)/BWL_data_science/ws20-business-data-science-basics---lab-journal-LukasBuesch/Intro_2_tidyverse/Bike_sales/sales_analysis#_challenge.R')
 #```
 
-```{r}
+```{r challenge_1, fig.width=14, fig.height=7}
 # Data Science at TUHH ------------------------------------------------------
 # SALES ANALYSIS - Challenge ----
 
