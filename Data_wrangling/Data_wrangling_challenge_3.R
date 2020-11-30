@@ -1,5 +1,5 @@
-# challenge 1 ----
 
+# challenge 3 ----
 
 # import libraries ----
 library(vroom)
@@ -98,52 +98,10 @@ import_uspc <- function(){
   setDT(uspc_tbl)
 }
 
+# import tables
 
-# Import tables
-
-assignee_1_tbl <- import_assignee()
-patent_assignee_1_tbl <- import_patent_assignee()
-
-# rename id to assignee_id
-setnames(assignee_1_tbl,"id","assignee_id")
-
-# join tables by id
-combined_data_1 <- merge(x = patent_assignee_1_tbl, y = assignee_1_tbl, 
-                       by    = "assignee_id", 
-                       all.x = TRUE, 
-                       all.y = FALSE)
-
-
-
-# in type: integer for country (2 - US Company or Corporation)
-
-US_comp_tbl <- combined_data_1[type == "2"]
-
-# reorder after appearance ----
-
-ranking_tbl <- US_comp_tbl[,.(count = .N), by = organization][
-  order(count, decreasing = TRUE)]
-
-head(ranking_tbl, 10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+assignee_3_tbl <- import_assignee()
+patent_assignee_3_tbl <- import_patent_assignee()
+uspc_3_tbl <- import_uspc()
 
 

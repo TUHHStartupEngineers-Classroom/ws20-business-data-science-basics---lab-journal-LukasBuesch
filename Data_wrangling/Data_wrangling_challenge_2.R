@@ -1,5 +1,5 @@
-# challenge 1 ----
 
+# challenge 2 ----
 
 # import libraries ----
 library(vroom)
@@ -98,52 +98,44 @@ import_uspc <- function(){
   setDT(uspc_tbl)
 }
 
+# import tables
 
-# Import tables
+assignee_2_tbl <- import_assignee()
+patent_assignee_2_tbl <- import_patent_assignee()
+patent_2_tbl <- import_patent()
 
-assignee_1_tbl <- import_assignee()
-patent_assignee_1_tbl <- import_patent_assignee()
 
 # rename id to assignee_id
-setnames(assignee_1_tbl,"id","assignee_id")
+setnames(assignee_2_tbl,"id","assignee_id")
+
+# rename number to patent_id
+setnames(patent_2_tbl,"number","patent_id")
 
 # join tables by id
-combined_data_1 <- merge(x = patent_assignee_1_tbl, y = assignee_1_tbl, 
-                       by    = "assignee_id", 
-                       all.x = TRUE, 
-                       all.y = FALSE)
+combined_data_2_0 <- merge(x = patent_assignee_2_tbl, y = assignee_2_tbl, 
+                           by    = "assignee_id", 
+                           all.x = TRUE, 
+                           all.y = FALSE)
+combined_data_2_1 <- merge(x = combined_data_2_0, y = patent_2_tbl, 
+                           by = "patent_id",
+                           all.x = TRUE, 
+                           all.y = FALSE)
 
 
+# make correct type of year
 
-# in type: integer for country (2 - US Company or Corporation)
+temp <- combined_data_2_1 %>% mutate_at(vars(date), funs(year, month, day)) 
 
-US_comp_tbl <- combined_data_1[type == "2"]
+# manipulate year column
+
+US_comp_2019_tbl <- temp[year == "2019"]
 
 # reorder after appearance ----
 
-ranking_tbl <- US_comp_tbl[,.(count = .N), by = organization][
+ranking_tbl <- US_comp_2019_tbl[,.(count = .N), by = organization][
   order(count, decreasing = TRUE)]
 
 head(ranking_tbl, 10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
