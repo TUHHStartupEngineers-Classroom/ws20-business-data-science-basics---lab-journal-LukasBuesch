@@ -42,3 +42,6 @@ vignettes/*.pdf
 *.tsv
 Data_wrangling/loan_data/
 *.xlsx
+.RDataTmp
+docs/Data_wrangling/loan_data/Acquisition_2019Q1.txt
+docs/Data_wrangling/loan_data/Performance_2019Q1.txt

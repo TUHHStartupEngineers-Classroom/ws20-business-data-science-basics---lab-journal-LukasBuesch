@@ -187,7 +187,7 @@ bike_data_lst <- map(bike_url_vec, get_bike_data)
 bike_data_tbl <- bind_rows(bike_data_lst)
 
 
-name_with_price = bind_cols(bike_data_tbl,bike_url_tbl$url)
+name_with_price = bind_cols(bike_data_tbl$price,bike_url_tbl$url)
 
 name_with_price
 
