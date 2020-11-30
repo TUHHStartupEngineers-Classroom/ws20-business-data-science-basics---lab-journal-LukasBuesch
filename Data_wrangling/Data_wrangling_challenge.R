@@ -117,11 +117,12 @@ combined_data_1 <- merge(x = patent_assignee_1_tbl, y = assignee_1_tbl,
 
 US_comp_tbl <- combined_data_1[type == "2"]
 
-# reorder after appearance not working right now----
+# reorder after appearance ----
 
-ranking_tbl <- US_comp_tbl[!is.na(current_upb), .SD[.N], by = loan_id][
-  , .(sum_current_upb = sum(current_upb, na.rm = TRUE), cnt_current_upb = .N), by = seller_name][
-    order(sum_current_upb, decreasing = TRUE)]
+ranking_tbl <- US_comp_tbl[,.(count = .N), by = organization][
+  order(count, decreasing = TRUE)]
+
+head(ranking_tbl, 10)
 
 
 
