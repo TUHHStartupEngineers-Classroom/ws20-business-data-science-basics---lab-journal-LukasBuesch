@@ -41,3 +41,4 @@ vignettes/*.pdf
 # big data
 *.tsv
 Data_wrangling/loan_data/
+*.xlsx
