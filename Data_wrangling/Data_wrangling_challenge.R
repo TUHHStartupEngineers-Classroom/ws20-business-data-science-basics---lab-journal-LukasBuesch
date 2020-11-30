@@ -154,6 +154,20 @@ combined_data_2_1 <- merge(x = combined_data_2_0, y = patent_2_tbl,
                            all.y = FALSE)
 
 
+# make correct type of year
+
+# manipulate year column
+
+US_comp_2019_tbl <- combined_data_2_1[year == "2019"]
+
+# reorder after appearance ----
+
+ranking_tbl <- US_comp_2019_tbl[,.(count = .N), by = organization][
+  order(count, decreasing = TRUE)]
+
+head(ranking_tbl, 10)
+
+
 
 
 
