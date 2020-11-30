@@ -37,3 +37,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# big data
+*.tsv
+Data_wrangling/loan_data/
