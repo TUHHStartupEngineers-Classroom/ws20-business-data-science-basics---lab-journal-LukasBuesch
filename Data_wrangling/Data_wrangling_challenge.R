@@ -31,17 +31,17 @@ import_assignee <- function(){
 import_patent <- function(){
   
   col_types <- list(
-    id = col_character(),
-    type = col_character(),
+    id = col_skip(),
+    type = col_skip(),
     number = col_character(),
-    country = col_character(),
+    country = col_skip(),
     date = col_date("%Y-%m-%d"),
-    abstract = col_character(),
-    title = col_character(),
-    kind = col_character(),
-    num_claims = col_double(),
-    filename = col_character(),
-    withdrawn = col_character()
+    abstract = col_skip(),
+    title = col_skip(),
+    kind = col_skip(),
+    num_claims = col_skip(),
+    filename = col_skip(),
+    withdrawn = col_skip()
   )
   
   patent_tbl <- vroom(
@@ -124,6 +124,34 @@ ranking_tbl <- US_comp_tbl[,.(count = .N), by = organization][
 
 head(ranking_tbl, 10)
 
+
+
+
+
+# challenge 2 ----
+
+# import tables
+
+assignee_2_tbl <- import_assignee()
+patent_assignee_2_tbl <- import_patent_assignee()
+patent_2_tbl <- import_patent()
+
+
+# rename id to assignee_id
+setnames(assignee_2_tbl,"id","assignee_id")
+
+# rename number to patent_id
+setnames(patent_2_tbl,"number","patent_id")
+
+# join tables by id
+combined_data_2_0 <- merge(x = patent_assignee_1_tbl, y = assignee_1_tbl, 
+                         by    = "assignee_id", 
+                         all.x = TRUE, 
+                         all.y = FALSE)
+combined_data_2_1 <- merge(x = combined_data_2_0, y = patent_2_tbl, 
+                           by = "patent_id",
+                           all.x = TRUE, 
+                           all.y = FALSE)
 
 
 
