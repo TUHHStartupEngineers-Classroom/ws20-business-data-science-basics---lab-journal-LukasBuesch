@@ -32,31 +32,6 @@ import_assignee <- function(){
   
 }
 
-import_patent <- function(){
-  
-  col_types <- list(
-    id = col_skip(),
-    type = col_skip(),
-    number = col_character(),
-    country = col_skip(),
-    date = col_date("%Y-%m-%d"),
-    abstract = col_skip(),
-    title = col_skip(),
-    kind = col_skip(),
-    num_claims = col_skip(),
-    filename = col_skip(),
-    withdrawn = col_skip()
-  )
-  
-  patent_tbl <- vroom(
-    file       = "Data_wrangling/patent.tsv", 
-    delim      = "\t", 
-    col_types  = col_types,
-    na         = c("", "NA", "NULL")
-  )
-  class(patent_tbl)
-  setDT(patent_tbl)
-}
 
 
 import_patent_assignee <- function(){
@@ -81,11 +56,14 @@ import_patent_assignee <- function(){
 import_uspc <- function(){
   
   col_types <- list(
-    uuid = col_character(),
+    #uuid = col_character(),
+    uuid = col_skip(),
     patent_id = col_character(),
     mainclass_id = col_character(),
-    subclass_id = col_character(),
-    sequence = col_double()
+    #subclass_id = col_character(),
+    subclass_id = col_skip(),
+    #sequence = col_double()
+    sequence = col_skip()
   )
   
   uspc_tbl <- vroom(
@@ -103,5 +81,51 @@ import_uspc <- function(){
 assignee_3_tbl <- import_assignee()
 patent_assignee_3_tbl <- import_patent_assignee()
 uspc_3_tbl <- import_uspc()
+
+
+# rename id to assignee_id
+setnames(assignee_3_tbl,"id","assignee_id")
+
+# join tables by id
+combined_data_3_1 <- merge(x = patent_assignee_3_tbl, y = assignee_3_tbl, 
+                         by    = "assignee_id", 
+                         all.x = TRUE, 
+                         all.y = FALSE)
+
+# join tables by patent_id
+combined_data_3_2 <- merge(x = combined_data_3_1, y = uspc_3_tbl, 
+                         by    = "patent_id", 
+                         all.x = TRUE, 
+                         all.y = FALSE)
+
+
+
+# reorder after appearance ----
+
+ranking_tbl <- combined_data_3_2[,.(count = .N), by = organization][
+  order(count, decreasing = TRUE)]
+
+head(ranking_tbl, 10)
+
+
+
+# get patents of first 10 companies ----
+
+# reduce data (only first 10 companies)
+ 
+patents_first_10_raw_tbl <- combined_data_3_2[organization %in% c(ranking_tbl[1,organization] 
+                                                          , ranking_tbl[2,organization] 
+                                                          , ranking_tbl[3,organization] 
+                                                          , ranking_tbl[4,organization]
+                                                          , ranking_tbl[5,organization]
+                                                          , ranking_tbl[6,organization]
+                                                          , ranking_tbl[7,organization]
+                                                          , ranking_tbl[8,organization]
+                                                          , ranking_tbl[9,organization]
+                                                          , ranking_tbl[10,organization])]
+# filter NA
+
+patents_first_10_tbl <- patents_first_10_raw_tbl[organization != "NA"]
+
 
 
