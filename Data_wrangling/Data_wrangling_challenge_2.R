@@ -128,7 +128,11 @@ temp <- combined_data_2_1 %>% mutate_at(vars(date), funs(year, month, day))
 
 # manipulate year column
 
-US_comp_2019_tbl <- temp[year == "2019"]
+US_comp_2019_raw_tbl <- temp[year == "2019"]
+
+# filter NA
+
+US_comp_2019_tbl <- US_comp_2019_raw_tbl[organization != "NA"]
 
 # reorder after appearance ----
 

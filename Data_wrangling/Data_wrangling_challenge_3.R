@@ -102,8 +102,12 @@ combined_data_3_2 <- merge(x = combined_data_3_1, y = uspc_3_tbl,
 
 # reorder after appearance ----
 
-ranking_tbl <- combined_data_3_2[,.(count = .N), by = organization][
+ranking_raw_tbl <- combined_data_3_2[,.(count = .N), by = organization][
   order(count, decreasing = TRUE)]
+
+# filter NA
+
+ranking_tbl <- ranking_raw_tbl[organization != "NA"]
 
 head(ranking_tbl, 10)
 
@@ -113,7 +117,7 @@ head(ranking_tbl, 10)
 
 # reduce data (only first 10 companies)
  
-patents_first_10_raw_tbl <- combined_data_3_2[organization %in% c(ranking_tbl[1,organization] 
+patents_first_10_tbl <- combined_data_3_2[organization %in% c(ranking_tbl[1,organization] 
                                                           , ranking_tbl[2,organization] 
                                                           , ranking_tbl[3,organization] 
                                                           , ranking_tbl[4,organization]
@@ -123,9 +127,18 @@ patents_first_10_raw_tbl <- combined_data_3_2[organization %in% c(ranking_tbl[1,
                                                           , ranking_tbl[8,organization]
                                                           , ranking_tbl[9,organization]
                                                           , ranking_tbl[10,organization])]
+
+
+
+# reorder after appearance (USPTO mainclasses) ----
+
+ranking_raw_tbl <- patents_first_10_tbl[,.(count = .N), by = mainclass_id][
+  order(count, decreasing = TRUE)]
+
 # filter NA
 
-patents_first_10_tbl <- patents_first_10_raw_tbl[organization != "NA"]
+ranking_tbl <- ranking_raw_tbl[mainclass_id != "NA"]
 
+head(ranking_tbl, 5)
 
 
