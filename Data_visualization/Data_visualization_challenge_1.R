@@ -25,26 +25,88 @@ covid_data_tbl %>%
 # Data Manipulation x axis - month, y axis - cumulative cases
 cumulative_cases_tbl <- covid_data_tbl %>%
   
-  # Select relevant columns
-  select(dateRep,month, countriesAndTerritories, `Cumulative_number_for_14_days_of_COVID-19_cases_per_100000`) %>%
+  # change date format
+  
+  mutate(date = dmy(dateRep)) %>%
+  
+  arrange(date) %>%
+  
 
-  # Filter for nations of interest
+  # Filter for nations of interest and year
   
   filter(countriesAndTerritories %in% c("Germany","Spain", "France", "United_Kingdom", "United_States_of_America")) %>%
+  
+  filter(year == "2020") %>%
   
   # grouping
   
   group_by(countriesAndTerritories) %>%
-  #summarize(revenue = sum(total_price)) %>%
+  mutate(cumulative_cases = cumsum(cases)) %>%
   ungroup()
+
+
+
 
 
 # Plot ----
 
 cumulative_cases_tbl %>%
+
+  # Canvas
   
-  ggplot(aes(dateRep, `Cumulative_number_for_14_days_of_COVID-19_cases_per_100000`), color = countriesAndTerritories) +
+  ggplot(aes(date, cumulative_cases), color = countriesAndTerritories) +
   
-  geom_line(size = 0.5, linetype = 1) +
-  geom_smooth(method = "loess", span = 0.2)
+  # Geoms
+  
+  
+  
+  geom_line(aes(x     = date,
+                y     = cumulative_cases,
+                color = countriesAndTerritories)) + 
+  
+  geom_label(aes(label = countriesAndTerritories,
+                 #fill = factor(countriesAndTerritories),
+                 #colour = "black",
+                 #fontface = "bold",
+                 vjust = "inward",
+                 hjust = "inward")) +
+  
+  
+  theme_light() +
+  
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "bold.italic"),
+    plot.background = element_blank(),
+    axis.title = element_text(face = "bold")
+    ) +
+  
+  labs(
+    title = "COVID-19 confirmed cases worldwide",
+    subtitle = "------------",
+    x = "Year 2020",
+    y = "Cumulative Cases",
+    color = "Continent / Country" # Legend text
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
