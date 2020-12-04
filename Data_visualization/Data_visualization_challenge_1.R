@@ -3,6 +3,7 @@
 # import libraries ----
 
 library(tidyverse)
+library(lubridate)
 
 # import data ----
 
@@ -10,16 +11,8 @@ covid_data_tbl <- read_csv("https://opendata.ecdc.europa.eu/covid19/casedistribu
 
 
 
-covid_data_tbl %>% 
-  mutate(across(countriesAndTerritories, str_replace_all, "_", " ")) %>%
-  mutate(countriesAndTerritories = case_when(
-    
-    countriesAndTerritories == "United Kingdom" ~ "UK",
-    countriesAndTerritories == "United States of America" ~ "USA",
-    countriesAndTerritories == "Czechia" ~ "Czech Republic",
-    TRUE ~ countriesAndTerritories
-    
-  ))
+covid_data_tbl <- covid_data_tbl%>% 
+  mutate(across(countriesAndTerritories, str_replace_all, "_", " "))
 
 
 # Data Manipulation x axis - month, y axis - cumulative cases
@@ -64,17 +57,28 @@ cumulative_cases_tbl %>%
                 y     = cumulative_cases,
                 color = countriesAndTerritories)) + 
   
-  geom_label(aes(label = countriesAndTerritories,
-                 #fill = factor(countriesAndTerritories),
-                 #colour = "black",
-                 #fontface = "bold",
-                 vjust = "inward",
-                 hjust = "inward")) +
+  scale_x_date(breaks = "1 month", minor_breaks = "1 month", date_labels = "%B") +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "", suffix = "M")) +
+  
+  
+  # geom_label(aes(,
+  #   y = max(cumulative_cases),
+  #   label = cumulative_cases,
+  #   fill = factor(countriesAndTerritories),
+  #   #colour = "black",
+  #   #fontface = "bold",
+  #   vjust = "inward",
+  #   hjust = "inward",
+  #   data = cumulative_cases_tbl$cumulative_cases[1])) +
+  
+  
+
   
   
   theme_light() +
   
   theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom",
     plot.title = element_text(face = "bold"),
     plot.caption = element_text(face = "bold.italic"),

@@ -12,7 +12,7 @@ covid_data_tbl <- read_csv("https://opendata.ecdc.europa.eu/covid19/casedistribu
 
 
 
-covid_data_tbl %>% 
+covid_data_tbl <- covid_data_tbl%>% 
   mutate(across(countriesAndTerritories, str_replace_all, "_", " ")) %>%
   mutate(countriesAndTerritories = case_when(
     
@@ -35,71 +35,50 @@ mortality_tbl <- covid_data_tbl %>%
   
   group_by(countriesAndTerritories) %>%
   summarize(population_2019 = mean(popData2019), deaths_sum = sum(deaths)) %>%
-  mutate(mortality = deaths_sum / population_2019)
-  mutate(date = dateRep)
+  mutate(`Mortality Rate [%]`  = 100 * deaths_sum / population_2019) %>%
   ungroup()
 
 
   
-  # plotting ---
-
+  
+# join world map with mortality
+  
 world <- map_data("world")
 
-mortality_tbl %>%
-  
-  ggplot(aes(mortality, countriesAndTerritories)) +
-  
-  geom_map(aes(map_id = world ), map = world )
-  
+world <- left_join(world, mortality_tbl, by = c("region" = "countriesAndTerritories"))
+
+world <- select(world, -c("population_2019","deaths_sum"))
 
 
-  geom_tile(aes(fill = pct)) +
-  geom_text(aes(label = scales::percent(pct, accuracy = 1L)), 
-            size = 3) +
-  facet_wrap(~ category_1, scales = "free_x") +
-  
-  # Formatting
-  scale_fill_gradient(low = "white", high = "#2C3E50") +
-  labs(
-    title = "Heatmap of Purchasing Habits",
-    x = "Bike Type (Category 2)",
-    y = "Customer",
-    caption = str_glue(
-      "Customers that prefer Road: 
-        To be discussed ...
-        
-        Customers that prefer Mountain: 
-        To be discussed ...")
-    ) +
-  
-   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none",
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "bold.italic")
-   )
-  
-  # Formatting
-  scale_fill_gradient(low = "white", high = "#2C3E50") +
-    labs(
-      title = "Heatmap of Purchasing Habits",
-      x = "Bike Type (Category 2)",
-      y = "Customer",
-      caption = str_glue(
-        "Customers that prefer Road: 
-        To be discussed ...
-        
-        Customers that prefer Mountain: 
-        To be discussed ...")
-    ) +
-    
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      legend.position = "none",
-      plot.title = element_text(face = "bold"),
-      plot.caption = element_text(face = "bold.italic")
-    )
 
+
+
+# plotting ---
+
+
+ggplot() + 
+
+geom_polygon(data = world,
+             aes(x=long,
+             y = lat,
+             fill = `Mortality Rate [%]`,
+             group = group)) + 
+  
+coord_fixed(1.3) + 
+  
+scale_fill_gradient(low='#EC4440',
+                    high='#2F142C') +
+  
+theme(axis.title.x=element_blank(),
+      axis.text.x=element_blank(),
+      axis.ticks.x=element_blank()) +
+  
+theme(axis.title.y=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank()) +
+  
+labs(title = "Confirmed COVIS-19 deaths relativ to the size of the population",
+     subtitle = "More then 1.2 Million confirmed COVID-19 deaths worldwide")
 
 
 
