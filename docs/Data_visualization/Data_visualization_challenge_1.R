@@ -27,7 +27,7 @@ cumulative_cases_tbl <- covid_data_tbl %>%
 
   # Filter for nations of interest and year
   
-  filter(countriesAndTerritories %in% c("Germany","Spain", "France", "United_Kingdom", "United_States_of_America")) %>%
+  filter(countriesAndTerritories %in% c("Germany","Spain", "France", "United Kingdom", "United States of America")) %>%
   
   filter(year == "2020") %>%
   
@@ -61,15 +61,14 @@ cumulative_cases_tbl %>%
   scale_y_continuous(labels = scales::dollar_format(prefix = "", suffix = "M")) +
   
   
-  # geom_label(aes(,
-  #   y = max(cumulative_cases),
-  #   label = cumulative_cases,
-  #   fill = factor(countriesAndTerritories),
-  #   #colour = "black",
-  #   #fontface = "bold",
-  #   vjust = "inward",
-  #   hjust = "inward",
-  #   data = cumulative_cases_tbl$cumulative_cases[1])) +
+  geom_label(aes(label = cumulative_cases),
+             size  = 5,
+             nudge_x  = -40,
+             nudge_y  = 5,
+             fill  = "#991fb4",
+             color = "white",
+             fontface = "italic",
+             data = filter(cumulative_cases_tbl,date == max(date) & cumulative_cases == max(cumulative_cases)))+
   
   
 
@@ -88,7 +87,7 @@ cumulative_cases_tbl %>%
   
   labs(
     title = "COVID-19 confirmed cases worldwide",
-    subtitle = "------------",
+    subtitle = "This graphic shows the total number and not the relative number of COVID-19 cases.",
     x = "Year 2020",
     y = "Cumulative Cases",
     color = "Continent / Country" # Legend text
