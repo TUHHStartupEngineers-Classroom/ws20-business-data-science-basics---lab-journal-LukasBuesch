@@ -1,9 +1,9 @@
-name: "MyLabJournal"
+name: "LB - LabJournal"
 output:
   html_document:
     css: style.css
 navbar:
-  title: "MyLabJournal"
+  title: "LB - LabJournal"
   left:
     - text: "Home"
       href: index.html
